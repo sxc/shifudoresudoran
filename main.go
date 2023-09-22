@@ -1,6 +1,8 @@
 package main
 
 import (
+	"encoding/json"
+	"io/ioutil"
 	"net/http"
 	"time"
 
@@ -8,9 +10,18 @@ import (
 	"github.com/rs/xid"
 )
 
+var recipes []Recipe
+
+func init() {
+	recipes = make([]Recipe, 0)
+	file, _ := ioutil.ReadFile("recipes.json")
+	_ = json.Unmarshal([]byte(file), &recipes)
+}
+
 func main() {
 	r := gin.Default()
 	r.POST("/recipes", NewRecipeHandler)
+	r.GET("/recipes", ListRecipesHandler)
 	r.Run(":3000") // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
 }
 
@@ -23,12 +34,6 @@ type Recipe struct {
 	PublishedAt  time.Time `json:"publishedAt"`
 }
 
-var recipes []Recipe
-
-func init() {
-	recipes = make([]Recipe, 0)
-}
-
 func NewRecipeHandler(c *gin.Context) {
 	var recipe Recipe
 	if err := c.ShouldBindJSON(&recipe); err != nil {
@@ -39,4 +44,8 @@ func NewRecipeHandler(c *gin.Context) {
 	recipe.PublishedAt = time.Now()
 	recipes = append(recipes, recipe)
 	c.JSON(http.StatusOK, recipe)
+}
+
+func ListRecipesHandler(c *gin.Context) {
+	c.JSON(http.StatusOK, recipes)
 }
