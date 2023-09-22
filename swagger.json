@@ -1,0 +1,23 @@
+{
+    "consumes": [
+       "application/json"   
+    ],
+    "produces": [
+       "application/json"
+    ],
+    "schemes": [
+       "http"
+    ],
+    "swagger": "2.0",
+    "info": {
+       "description": "This is a sample recipes API. You can find out more about the API at https://github.com/sxc/shifudoresudoran",
+       "title": "Recipes API",
+       "contact": {
+         "name": "Jim"
+       },
+       "version": "1.0.0"
+    },
+    "host": "localhost:3000",
+    "basePath": "/",
+    "paths": {}
+}
